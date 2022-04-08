@@ -10,5 +10,8 @@
     <string name="title_navigation">TV Show Reminder</string>
     <string name="title_shows">Series que sigo</string>
     <string name="title_recommended">Recomendadas</string>
+    <string name="subscribe_button">Subscribe</string>
+    <string name="subscribed_button">Subscribed</string>
+    <string name="title_overview">Overview</string>
 
 </resources>

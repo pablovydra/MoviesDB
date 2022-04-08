@@ -21,7 +21,7 @@ class RecommendedAdapter(
     interface RecommendedAdapterActions {
         fun addToFavorite(tv: Tv, callback: (() -> Unit)? = null)
         fun removeFavorite(tv: Tv, callback: (() -> Unit)? = null)
-        fun navigateToItem(id: Int)
+        fun navigateToItem(show: Shows)
     }
 
     class RecommendedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -52,7 +52,7 @@ class RecommendedAdapter(
             .into(holder.poster)
 
         holder.itemView.setOnClickListener {
-            listener.navigateToItem(item.id)
+            listener.navigateToItem(item)
         }
     }
 

@@ -27,6 +27,8 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
     private val loading = MutableLiveData<Boolean>()
     val setAdapterOnView = MutableLiveData<Boolean>()
 
+    val selectedShow = MutableLiveData<Shows>()
+
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.IO)
 

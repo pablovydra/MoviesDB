@@ -5,23 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movies.R
 import com.example.movies.databinding.FragmentHomeBinding
+import com.example.movies.models.entity.Shows
 import com.example.movies.models.entity.Tv
 import com.example.movies.ui.home.adapter.RecommendedAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), RecommendedAdapter.RecommendedAdapterActions {
 
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
     private lateinit var adapter: RecommendedAdapter
 
     override fun onCreateView(
@@ -60,7 +60,10 @@ class HomeFragment : Fragment(), RecommendedAdapter.RecommendedAdapterActions {
     override fun removeFavorite(tv: Tv, callback: (() -> Unit)?) {
     }
 
-    override fun navigateToItem(id: Int) {
+    override fun navigateToItem(show: Shows) {
+        viewModel.selectedShow.value = show
+        view?.findNavController()
+            ?.navigate(R.id.action_homeFragment_to_detailsFragment)
     }
 
 }
