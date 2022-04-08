@@ -1,18 +1,14 @@
 package com.example.movies.di
 
-import android.content.Context
 import android.support.annotation.NonNull
-import com.example.movies.api.RequestInterceptor
+import com.example.movies.models.network.RequestInterceptor
 import com.example.movies.models.repository.MoviesRepositoryImpl
 import com.example.movies.models.services.MoviesApiService
 import com.example.movies.models.usecase.MoviesUseCase
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

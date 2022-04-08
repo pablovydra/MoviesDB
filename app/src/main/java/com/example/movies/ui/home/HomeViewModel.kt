@@ -1,47 +1,45 @@
-package com.example.movies.ui
+package com.example.movies.ui.home
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.movies.models.dto.ApiResource
-import com.example.movies.models.network.DiscoverTvResponse
+import com.example.movies.models.entity.Tv
 import com.example.movies.models.usecase.MoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase) : ViewModel() {
 
-    val discoverTv = MutableLiveData<DiscoverTvResponse>()
-    val loading = MutableLiveData<Boolean>(true)
+    val showList = MutableLiveData<MutableList<Tv>>(mutableListOf())
+    val loading = MutableLiveData<Boolean>()
     val setAdapterOnView = MutableLiveData<Boolean>()
+
+    private val pagination = MutableLiveData<Int>(0)
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.IO)
 
-    init {
+    private var page = 0
 
+    init {
+        getShows()
     }
 
     fun getShows() {
-        viewModelScope.launch(Dispatchers.IO) {
-
-            var response = moviesUseCase.getDiscoverTv(1)
-            when (response.status) {
+        coroutineScope.launch(Dispatchers.IO) {
+            val response = pagination.value?.let { _ -> moviesUseCase.getDiscoverTv(++page) }
+            when (response?.status) {
                 ApiResource.Status.SUCCESS -> {
                     loading.postValue(false)
-
-                    discoverTv.postValue(response.data!!)
-                    Log.i("sky", "getShows: ${response.data!!.total_pages}")
+                    if (response.data?.results?.isNotEmpty() == true) {
+                        response.data.let { list -> showList.value?.addAll(list.results) }
+                        setAdapterOnView.postValue(true)
+                    }
                 }
                 ApiResource.Status.ERROR -> {
                     loading.postValue(false)

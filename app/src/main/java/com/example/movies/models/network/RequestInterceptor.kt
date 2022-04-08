@@ -1,4 +1,4 @@
-package com.example.movies.api
+package com.example.movies.models.network
 
 import com.example.movies.BuildConfig
 import okhttp3.Interceptor
