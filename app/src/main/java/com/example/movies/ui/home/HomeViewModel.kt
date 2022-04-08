@@ -19,7 +19,11 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase) : ViewModel() {
 
     val showList = MutableLiveData<ArrayList<Shows>>(arrayListOf())
+    val subscriptionsList = MutableLiveData<List<Shows>>(arrayListOf())
     private val genresList = MutableLiveData<List<Genres>>(mutableListOf())
+
+    val subscriptionsIsEmpty = MutableLiveData<Boolean>(true)
+
     private val loading = MutableLiveData<Boolean>()
     val setAdapterOnView = MutableLiveData<Boolean>()
 
@@ -31,6 +35,21 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
     init {
         coroutineScope.launch(Dispatchers.IO) {
             getGenres()
+        }
+    }
+
+    private fun getGenres() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getGenresFlows()
+                .onStart {
+                    loading.postValue(true)
+                }
+                .onCompletion {
+                    getShows()
+                }
+                .collect {
+                    genresList.postValue(it)
+                }
         }
     }
 
@@ -48,23 +67,8 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
         }
     }
 
-    fun getGenres() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getGenresFlows()
-                .onStart {
-                    loading.postValue(true)
-                }
-                .onCompletion {
-                    getShows()
-                }
-                .collect {
-                    genresList.postValue(it)
-                }
-        }
-    }
-
-    fun getGenresFlows(): Flow<List<Genres>> = flow {
-        var response = moviesUseCase.getGenresTv()
+    private fun getGenresFlows(): Flow<List<Genres>> = flow {
+        val response = moviesUseCase.getGenresTv()
         when (response.status) {
             ApiResource.Status.SUCCESS -> {
                 response.data?.genres?.let {
@@ -76,16 +80,16 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
         }
     }
 
-    fun getShowsFlow(): Flow<List<Shows>> = flow {
-        var response = moviesUseCase.getDiscoverTv(++page)
+    private fun getShowsFlow(): Flow<List<Shows>> = flow {
+        val response = moviesUseCase.getDiscoverTv(++page)
         when (response.status) {
             ApiResource.Status.SUCCESS -> {
 
                 if (response.data?.results != null) {
 
-                    var itemsToAdd = ArrayList<Shows>()
+                    val itemsToAdd = ArrayList<Shows>()
 
-                    for (data in response.data!!.results) {
+                    for (data in response.data.results) {
 
                         var genreFinal = ""
 
@@ -93,7 +97,7 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
                             val genderFilter = genresList.value?.filter { it.id == data.genre_ids.first() }
                             if (genderFilter != null) {
                                 if (genderFilter.isNotEmpty()) {
-                                    genreFinal = genderFilter?.first()?.name
+                                    genreFinal = genderFilter.first().name
                                 }
                             }
                         }

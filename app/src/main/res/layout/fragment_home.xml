@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View" />
+        <variable
+            name="viewModel"
+            type="com.example.movies.ui.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,7 +55,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/favorites"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.subscriptionsIsEmpty ? View.VISIBLE : View.GONE}">
 
                 <TextView
                     android:id="@+id/title_shows"
