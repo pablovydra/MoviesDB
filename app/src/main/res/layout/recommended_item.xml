@@ -53,7 +53,7 @@
                 tools:text="SuperGirl" />
 
             <TextView
-                android:id="@+id/category"
+                android:id="@+id/genre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -63,7 +63,6 @@
                 android:padding="10dp"
                 android:textAllCaps="true"
                 android:textColor="@color/grey_tags"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@+id/poster"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Adventure" />

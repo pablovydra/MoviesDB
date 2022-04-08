@@ -1,6 +1,5 @@
 package com.example.movies.ui.home.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,7 @@ class RecommendedAdapter(
     class RecommendedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val poster: ImageView = itemView.findViewById(R.id.poster)
         val title: TextView = itemView.findViewById(R.id.title)
-        val category: TextView = itemView.findViewById(R.id.category)
+        val genre: TextView = itemView.findViewById(R.id.genre)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecommendedViewHolder {
@@ -43,9 +42,9 @@ class RecommendedAdapter(
 
         holder.title.text = item.original_name
 
-        if (item.keywords?.isNotEmpty() == true) {
-            holder.category.text = item.keywords!![0].name ?: ""
-        }
+//        if (item.genre_ids.isNotEmpty()) {
+//            holder.genre.text =
+//        }
 
         val uri: String = "https://image.tmdb.org/t/p/original/" + item.poster_path.toString()
 
