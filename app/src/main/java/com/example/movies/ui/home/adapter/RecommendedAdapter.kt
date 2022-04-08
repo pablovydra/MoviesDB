@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.movies.R
+import com.example.movies.models.entity.Shows
 import com.example.movies.models.entity.Tv
 
 class RecommendedAdapter(
     private val listener: RecommendedAdapterActions
 ) :
-    ListAdapter<Tv, RecommendedAdapter.RecommendedViewHolder>(DiffUtilCallback) {
+    ListAdapter<Shows, RecommendedAdapter.RecommendedViewHolder>(DiffUtilCallback) {
 
     interface RecommendedAdapterActions {
         fun addToFavorite(tv: Tv, callback: (() -> Unit)? = null)
@@ -40,11 +41,9 @@ class RecommendedAdapter(
     override fun onBindViewHolder(holder: RecommendedViewHolder, position: Int) {
         val item = getItem(position)
 
-        holder.title.text = item.original_name
+        holder.title.text = item.name
 
-//        if (item.genre_ids.isNotEmpty()) {
-//            holder.genre.text =
-//        }
+        holder.genre.text = item.genre
 
         val uri: String = "https://image.tmdb.org/t/p/original/" + item.poster_path.toString()
 
@@ -59,10 +58,10 @@ class RecommendedAdapter(
 
 }
 
-private object DiffUtilCallback : DiffUtil.ItemCallback<Tv>() {
-    override fun areItemsTheSame(oldItem: Tv, newItem: Tv): Boolean {
+private object DiffUtilCallback : DiffUtil.ItemCallback<Shows>() {
+    override fun areItemsTheSame(oldItem: Shows, newItem: Shows): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Tv, newItem: Tv): Boolean = oldItem == newItem
+    override fun areContentsTheSame(oldItem: Shows, newItem: Shows): Boolean = oldItem == newItem
 }

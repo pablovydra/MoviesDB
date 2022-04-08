@@ -13,6 +13,9 @@ import com.example.movies.databinding.FragmentHomeBinding
 import com.example.movies.models.entity.Tv
 import com.example.movies.ui.home.adapter.RecommendedAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), RecommendedAdapter.RecommendedAdapterActions {
@@ -32,9 +35,8 @@ class HomeFragment : Fragment(), RecommendedAdapter.RecommendedAdapterActions {
         binding.recycler.adapter = adapter
 
         viewModel.setAdapterOnView.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.showList.value?.toList())
+            adapter.submitList(viewModel.showList.value)
         })
-
         binding.recycler.layoutManager = LinearLayoutManager(this.context)
         binding.recycler.setHasFixedSize(true)
 
@@ -43,7 +45,7 @@ class HomeFragment : Fragment(), RecommendedAdapter.RecommendedAdapterActions {
                 RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    if (!recyclerView.canScrollVertically(1)) {
+                    if (recyclerView.canScrollVertically(-1)) {
                         viewModel.getShows()
                     }
                 }
