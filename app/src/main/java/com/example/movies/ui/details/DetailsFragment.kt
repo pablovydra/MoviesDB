@@ -33,7 +33,13 @@ class DetailsFragment : Fragment() {
             .load(uri)
             .into(binding.cover)
 
+        Glide.with(requireContext())
+            .load(uri)
+            .into(binding.backgroundImage)
+
         binding.name.text = viewModel.selectedShow.value?.name
+
+        binding.overview.text = viewModel.selectedShow.value?.overview
 
         Glide.with(this)
             .asBitmap()
@@ -42,6 +48,7 @@ class DetailsFragment : Fragment() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     binding.cover.setImageBitmap(resource)
                     binding.container.setBackgroundColor(getDominantColor(resource))
+                    binding.subscribeText.setTextColor(getDominantColor(resource))
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {}
