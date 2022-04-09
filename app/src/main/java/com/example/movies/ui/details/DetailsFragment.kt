@@ -31,8 +31,9 @@ class DetailsFragment : Fragment() {
         binding.lifecycleOwner = this
 
         viewModel.getSubscriptions()
+        val selectedShow = viewModel.selectedShow.value
 
-        val uri: String = "https://image.tmdb.org/t/p/original/" + viewModel.selectedShow.value?.poster_path.toString()
+        val uri: String = "https://image.tmdb.org/t/p/original/" + selectedShow?.poster_path.toString()
 
         Glide.with(requireContext())
             .load(uri)
@@ -42,9 +43,9 @@ class DetailsFragment : Fragment() {
             .load(uri)
             .into(binding.backgroundImage)
 
-        binding.name.text = viewModel.selectedShow.value?.name
+        binding.name.text = selectedShow?.name
 
-        binding.overview.text = viewModel.selectedShow.value?.overview
+        binding.overview.text = selectedShow?.overview
 
         Glide.with(this)
             .asBitmap()
@@ -58,19 +59,17 @@ class DetailsFragment : Fragment() {
                 override fun onLoadCleared(placeholder: Drawable?) {}
             })
 
-        val isSubscribed = viewModel.subscriptionList.value?.filter { it.id == viewModel.selectedShow.value?.id }
-
-        if (isSubscribed != null) {
-            if (isSubscribed.isEmpty()) {
-                binding.button.setImageResource(R.drawable.button_unsubscribe_search)
-                binding.button.tag = R.drawable.button_unsubscribe_search
-                binding.subscribeText.text = "Subscribe"
-                binding.subscribeText.setTextColor(resources.getColor(R.color.white))
-            } else {
+        if (selectedShow != null) {
+            if (selectedShow.subscribed) {
                 binding.button.setImageResource(R.drawable.button_subscribe)
                 binding.button.tag = R.drawable.button_subscribe
                 binding.subscribeText.text = "Subscribed"
                 binding.subscribeText.setTextColor(resources.getColor(R.color.black_no_black))
+            } else {
+                binding.button.setImageResource(R.drawable.button_unsubscribe_search)
+                binding.button.tag = R.drawable.button_unsubscribe_search
+                binding.subscribeText.text = "Subscribe"
+                binding.subscribeText.setTextColor(resources.getColor(R.color.white))
             }
         }
 
@@ -81,12 +80,12 @@ class DetailsFragment : Fragment() {
                 binding.subscribeText.setTextColor(resources.getColor(R.color.white))
                 binding.subscribeText.text = resources.getString(R.string.subscribe_button)
 
-                viewModel.selectedShow.value?.let { selectedShow ->
+                selectedShow?.let { selectedShow ->
                     viewModel.delete(selectedShow.id)
                 }
 
                 viewModel.showList.value?.forEach {
-                    if (it.id == viewModel.selectedShow.value?.id) {
+                    if (it.id == selectedShow?.id) {
                         it.subscribed = false
                     }
                     viewModel.showListWasEdited.value = true
@@ -98,12 +97,12 @@ class DetailsFragment : Fragment() {
                 binding.subscribeText.setTextColor(resources.getColor(R.color.black_no_black))
                 binding.subscribeText.text = resources.getString(R.string.subscribed_button)
 
-                viewModel.selectedShow.value?.let { selectedShow ->
+                selectedShow?.let { selectedShow ->
                     viewModel.insert(selectedShow)
                 }
 
                 viewModel.showList.value?.forEach {
-                    if (it.id == viewModel.selectedShow.value?.id) {
+                    if (it.id == selectedShow?.id) {
                         it.subscribed = true
                     }
                     viewModel.showListWasEdited.value = true

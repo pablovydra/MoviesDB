@@ -17,7 +17,7 @@ import com.example.movies.databinding.FragmentSearchBinding
 import com.example.movies.models.database.Shows
 import com.example.movies.ui.home.HomeViewModel
 import com.example.movies.ui.home.adapter.AdapterActions
-import com.example.movies.ui.search.adapter.SearchAdapter
+import com.example.movies.ui.home.adapter.SearchAdapter
 
 class SearchFragment : Fragment(), AdapterActions {
 
