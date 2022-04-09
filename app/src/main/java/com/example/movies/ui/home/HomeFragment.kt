@@ -35,6 +35,7 @@ class HomeFragment : Fragment(), AdapterActions {
 
         viewModel.getSubscriptions()
 
+        // Recommended Shows
         adapter = RecommendedAdapter(this)
         binding.recycler.adapter = adapter
         viewModel.setRecommendedList.observe(viewLifecycleOwner, Observer {
@@ -42,16 +43,6 @@ class HomeFragment : Fragment(), AdapterActions {
         })
         binding.recycler.layoutManager = LinearLayoutManager(this.context)
         binding.recycler.setHasFixedSize(true)
-
-        adapterSubs = SubscriptionsAdapter(this)
-        binding.recyclerSubs.adapter = adapterSubs
-        viewModel.setSubscriptionsList.observe(viewLifecycleOwner, Observer {
-            adapterSubs.submitList(viewModel.subscriptionList.value)
-        })
-
-        binding.recyclerSubs.layoutManager =
-            LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerSubs.setHasFixedSize(true)
 
         binding.recycler.addOnScrollListener(
             object :
@@ -64,6 +55,17 @@ class HomeFragment : Fragment(), AdapterActions {
                 }
             })
 
+        // Subscribed Shows
+        adapterSubs = SubscriptionsAdapter(this)
+        binding.recyclerSubs.adapter = adapterSubs
+        viewModel.setSubscriptionsList.observe(viewLifecycleOwner, Observer {
+            adapterSubs.submitList(viewModel.subscriptionList.value)
+            showOrHideSubscriptions()
+        })
+        binding.recyclerSubs.layoutManager =
+            LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerSubs.setHasFixedSize(true)
+
         binding.searchIcon.setOnClickListener {
             navigateToSearch()
         }
@@ -71,9 +73,18 @@ class HomeFragment : Fragment(), AdapterActions {
         viewModel.showListWasEdited.observe(viewLifecycleOwner, Observer {
             adapter.submitList(viewModel.showList.value)
             adapterSubs.submitList(viewModel.subscriptionList.value)
+            showOrHideSubscriptions()
         })
 
         return binding.root
+    }
+
+    private fun showOrHideSubscriptions() {
+        if (viewModel.subscriptionList.value?.isEmpty() == true) {
+            binding.favorites.visibility = View.GONE
+        } else {
+            binding.favorites.visibility = View.VISIBLE
+        }
     }
 
     override fun addSubscribe(show: Shows, callback: (() -> Unit)?) {
