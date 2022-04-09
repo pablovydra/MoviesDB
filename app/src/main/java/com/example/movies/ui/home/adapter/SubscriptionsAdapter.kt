@@ -4,20 +4,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.movies.R
-import com.example.movies.models.entity.Shows
-import com.example.movies.models.entity.Tv
-import com.example.movies.models.subscriptions.Subscription
+import com.example.movies.models.database.Shows
 
 class SubscriptionsAdapter(
     private val listener: AdapterActions
 ) :
-    ListAdapter<Subscription, SubscriptionsAdapter.SubscriptionsViewHolder>(DiffUtilCallbackSubs) {
+    ListAdapter<Shows, SubscriptionsAdapter.SubscriptionsViewHolder>(DiffUtilCallbackSubs) {
 
     class SubscriptionsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val poster: ImageView = itemView.findViewById(R.id.poster)
@@ -41,16 +38,16 @@ class SubscriptionsAdapter(
             .into(holder.poster)
 
         holder.itemView.setOnClickListener {
-             listener.navigateToShowId(item.showId)
+             listener.navigateToItem(item)
         }
     }
 
 }
 
-private object DiffUtilCallbackSubs : DiffUtil.ItemCallback<Subscription>() {
-    override fun areItemsTheSame(oldItem: Subscription, newItem: Subscription): Boolean {
+private object DiffUtilCallbackSubs : DiffUtil.ItemCallback<Shows>() {
+    override fun areItemsTheSame(oldItem: Shows, newItem: Shows): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Subscription, newItem: Subscription): Boolean = oldItem == newItem
+    override fun areContentsTheSame(oldItem: Shows, newItem: Shows): Boolean = oldItem == newItem
 }

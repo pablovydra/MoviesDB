@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.movies.R
-import com.example.movies.models.entity.Shows
-import com.example.movies.models.entity.Tv
+import com.example.movies.models.database.Shows
 
 class RecommendedAdapter(
     private val listener: AdapterActions
@@ -46,7 +45,7 @@ class RecommendedAdapter(
             .into(holder.poster)
 
         holder.itemView.setOnClickListener {
-            listener.navigateToShowId(item.id)
+            listener.navigateToItem(item)
         }
     }
 

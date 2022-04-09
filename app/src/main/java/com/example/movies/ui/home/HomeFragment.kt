@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
 import com.example.movies.databinding.FragmentHomeBinding
-import com.example.movies.models.entity.Shows
+import com.example.movies.models.database.Shows
 import com.example.movies.models.entity.Tv
 import com.example.movies.ui.home.adapter.AdapterActions
 import com.example.movies.ui.home.adapter.RecommendedAdapter
@@ -75,18 +75,18 @@ class HomeFragment : Fragment(), AdapterActions {
 
     }
 
-    override fun navigateToShowId(showId: Int) {
-        val filteredShow = viewModel.showList.value?.filter { it.id == showId }
-        viewModel.selectedShow.value = filteredShow?.first()
-
-        view?.findNavController()
-            ?.navigate(R.id.action_homeFragment_to_detailsFragment)
-    }
-
-//    override fun navigateToItem(show: Shows) {
-//        viewModel.selectedShow.value = show
+//    override fun navigateToShowId(showId: Int) {
+//        val filteredShow = viewModel.showList.value?.filter { it.id == showId }
+//        viewModel.selectedShow.value = filteredShow?.first()
+//
 //        view?.findNavController()
 //            ?.navigate(R.id.action_homeFragment_to_detailsFragment)
 //    }
+
+    override fun navigateToItem(show: Shows) {
+        viewModel.selectedShow.value = show
+        view?.findNavController()
+            ?.navigate(R.id.action_homeFragment_to_detailsFragment)
+    }
 
 }
