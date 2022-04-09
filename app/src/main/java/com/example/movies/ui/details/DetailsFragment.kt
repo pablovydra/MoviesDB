@@ -59,12 +59,11 @@ class DetailsFragment : Fragment() {
             })
 
         val isSubscribed = viewModel.subscriptionList.value?.filter { it.id == viewModel.selectedShow.value?.id }
-        Log.i("skywalker", "isSubscribed: ${isSubscribed?.size} to ${viewModel.selectedShow.value?.name}")
 
         if (isSubscribed != null) {
             if (isSubscribed.isEmpty()) {
-                binding.button.setImageResource(R.drawable.button_unsubscribe)
-                binding.button.tag = R.drawable.button_unsubscribe
+                binding.button.setImageResource(R.drawable.button_unsubscribe_search)
+                binding.button.tag = R.drawable.button_unsubscribe_search
                 binding.subscribeText.text = "Subscribe"
                 binding.subscribeText.setTextColor(resources.getColor(R.color.white))
             } else {
@@ -77,8 +76,8 @@ class DetailsFragment : Fragment() {
 
         binding.buttonConstraint.setOnClickListener {
             if (binding.button.tag == R.drawable.button_subscribe) {
-                binding.button.setImageResource(R.drawable.button_unsubscribe)
-                binding.button.tag = R.drawable.button_unsubscribe
+                binding.button.setImageResource(R.drawable.button_unsubscribe_search)
+                binding.button.tag = R.drawable.button_unsubscribe_search
                 binding.subscribeText.setTextColor(resources.getColor(R.color.white))
                 binding.subscribeText.text = resources.getString(R.string.subscribe_button)
 
@@ -91,7 +90,6 @@ class DetailsFragment : Fragment() {
                         it.subscribed = false
                     }
                 }
-                viewModel.showListWasEdited.value = true
 
             } else {
                 binding.button.setImageResource(R.drawable.button_subscribe)
@@ -108,7 +106,6 @@ class DetailsFragment : Fragment() {
                         it.subscribed = true
                     }
                 }
-                viewModel.showListWasEdited.value = true
 
             }
         }
