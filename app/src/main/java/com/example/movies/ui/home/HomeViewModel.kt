@@ -41,7 +41,6 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
     init {
         coroutineScope.launch(Dispatchers.IO) {
             getGenres()
-            getSubscriptions()
         }
     }
 

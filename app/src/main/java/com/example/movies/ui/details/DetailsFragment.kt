@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.movies.R
 import com.example.movies.databinding.FragmentDetailsBinding
 import com.example.movies.ui.home.HomeViewModel
 
@@ -27,6 +28,8 @@ class DetailsFragment : Fragment() {
     ): View? {
         binding = FragmentDetailsBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
+
+        viewModel.getSubscriptions()
 
         val uri: String = "https://image.tmdb.org/t/p/original/" + viewModel.selectedShow.value?.poster_path.toString()
 
@@ -60,18 +63,28 @@ class DetailsFragment : Fragment() {
 
         if (isSubscribed != null) {
             if (isSubscribed.isEmpty()) {
-                binding.buttonConstraint.alpha = 1F
+                binding.button.setImageResource(R.drawable.button_unsubscribe)
+                binding.button.tag = R.drawable.button_unsubscribe
                 binding.subscribeText.text = "Subscribe"
             } else {
-                binding.buttonConstraint.alpha = 0.3F
+                binding.button.setImageResource(R.drawable.button_subscribe)
+                binding.button.tag = R.drawable.button_subscribe
                 binding.subscribeText.text = "Subscribed"
             }
         }
 
         binding.buttonConstraint.setOnClickListener {
-            viewModel.selectedShow.value?.let { selectedShow -> viewModel.insert(selectedShow) }
-            binding.buttonConstraint.alpha = 0.3F
-            binding.subscribeText.text = "Subscribed"
+            if (binding.button.tag == R.drawable.button_subscribe) {
+                binding.button.setImageResource(R.drawable.button_unsubscribe)
+                binding.button.tag = R.drawable.button_unsubscribe
+                viewModel.selectedShow.value?.let { selectedShow -> viewModel.delete(selectedShow.id) }
+                binding.subscribeText.text = "Subscribe"
+            } else {
+                binding.button.setImageResource(R.drawable.button_subscribe)
+                binding.button.tag = R.drawable.button_subscribe
+                viewModel.selectedShow.value?.let { selectedShow -> viewModel.insert(selectedShow) }
+                binding.subscribeText.text = "Subscribed"
+            }
         }
 
         return binding.root

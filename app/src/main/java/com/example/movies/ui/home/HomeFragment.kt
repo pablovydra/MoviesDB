@@ -31,6 +31,8 @@ class HomeFragment : Fragment(), RecommendedAdapter.RecommendedAdapterActions {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
 
+        viewModel.getSubscriptions()
+
         adapter = RecommendedAdapter(this)
         binding.recycler.adapter = adapter
 
