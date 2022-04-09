@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.R
 import com.example.movies.databinding.FragmentSearchBinding
 import com.example.movies.models.database.Shows
-import com.example.movies.models.entity.Tv
 import com.example.movies.ui.home.HomeViewModel
 import com.example.movies.ui.home.adapter.AdapterActions
 import com.example.movies.ui.home.adapter.RecommendedAdapter
@@ -22,7 +21,7 @@ class SearchFragment : Fragment(), AdapterActions {
 
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: HomeViewModel by activityViewModels()
-     private lateinit var adapter: SearchAdapter
+    private lateinit var adapter: SearchAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +30,11 @@ class SearchFragment : Fragment(), AdapterActions {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
 
+        viewModel.getSubscriptions()
+
+        adapter = SearchAdapter(this)
+        adapter.submitList(viewModel.showList.value)
+
         adapter = SearchAdapter(this)
         binding.recycler.adapter = adapter
 
@@ -38,7 +42,9 @@ class SearchFragment : Fragment(), AdapterActions {
             adapter.submitList(viewModel.showList.value)
         })
 
-        adapter.submitList(viewModel.showList.value)
+        viewModel.showListWasEdited.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(viewModel.showList.value)
+        })
 
         binding.recycler.layoutManager = LinearLayoutManager(this.context)
         binding.recycler.setHasFixedSize(true)
@@ -46,12 +52,24 @@ class SearchFragment : Fragment(), AdapterActions {
         return binding.root
     }
 
-    override fun addToFavorite(tv: Tv, callback: (() -> Unit)?) {
-
+    override fun addSubscribe(show: Shows, callback: (() -> Unit)?) {
+        viewModel.showList.value?.forEach {
+            if (it.id == show.id) {
+                it.subscribed = true
+            }
+        }
+        viewModel.insert(show)
+        viewModel.showListWasEdited.value = true
     }
 
-    override fun removeFavorite(tv: Tv, callback: (() -> Unit)?) {
-
+    override fun deleteSubscribe(show: Shows, callback: (() -> Unit)?) {
+        viewModel.showList.value?.forEach {
+            if (it.id == show.id) {
+                it.subscribed = false
+            }
+        }
+        viewModel.delete(show.id)
+        viewModel.showListWasEdited.value = true
     }
 
     override fun navigateToItem(show: Shows) {

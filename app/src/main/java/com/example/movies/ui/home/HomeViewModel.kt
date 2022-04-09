@@ -32,6 +32,8 @@ class HomeViewModel @Inject constructor(
 
     val selectedShow = MutableLiveData<Shows>()
 
+    val showListWasEdited = MutableLiveData<Boolean>()
+
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.IO)
 
