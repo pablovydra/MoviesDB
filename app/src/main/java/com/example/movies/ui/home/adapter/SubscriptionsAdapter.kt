@@ -12,32 +12,27 @@ import com.bumptech.glide.Glide
 import com.example.movies.R
 import com.example.movies.models.entity.Shows
 import com.example.movies.models.entity.Tv
+import com.example.movies.models.subscriptions.Subscription
 
-class RecommendedAdapter(
+class SubscriptionsAdapter(
     private val listener: AdapterActions
 ) :
-    ListAdapter<Shows, RecommendedAdapter.RecommendedViewHolder>(DiffUtilCallback) {
+    ListAdapter<Subscription, SubscriptionsAdapter.SubscriptionsViewHolder>(DiffUtilCallbackSubs) {
 
-    class RecommendedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class SubscriptionsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val poster: ImageView = itemView.findViewById(R.id.poster)
-        val title: TextView = itemView.findViewById(R.id.title)
-        val genre: TextView = itemView.findViewById(R.id.genre)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecommendedViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubscriptionsViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
-            R.layout.recommended_item,
+            R.layout.subscription_item,
             parent, false
         )
-        return RecommendedViewHolder(itemView)
+        return SubscriptionsViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: RecommendedViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SubscriptionsViewHolder, position: Int) {
         val item = getItem(position)
-
-        holder.title.text = item.name
-
-        holder.genre.text = item.genre
 
         val uri: String = "https://image.tmdb.org/t/p/original/" + item.poster_path.toString()
 
@@ -46,16 +41,17 @@ class RecommendedAdapter(
             .into(holder.poster)
 
         holder.itemView.setOnClickListener {
-            listener.navigateToItem(item)
+             listener.navigateToItem(Shows(
+                 item.id, item.poster_path, item.overview, item.first_air_date, null, item.genre, item.name, item.subscribed))
         }
     }
 
 }
 
-private object DiffUtilCallback : DiffUtil.ItemCallback<Shows>() {
-    override fun areItemsTheSame(oldItem: Shows, newItem: Shows): Boolean {
+private object DiffUtilCallbackSubs : DiffUtil.ItemCallback<Subscription>() {
+    override fun areItemsTheSame(oldItem: Subscription, newItem: Subscription): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Shows, newItem: Shows): Boolean = oldItem == newItem
+    override fun areContentsTheSame(oldItem: Subscription, newItem: Subscription): Boolean = oldItem == newItem
 }

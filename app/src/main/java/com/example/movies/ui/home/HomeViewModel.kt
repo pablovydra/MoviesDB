@@ -1,10 +1,8 @@
 package com.example.movies.ui.home
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.ColumnInfo
 import com.example.movies.models.dto.ApiResource
 import com.example.movies.models.entity.Genres
 import com.example.movies.models.entity.Shows
@@ -26,10 +24,9 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
     private val genresList = MutableLiveData<List<Genres>>(mutableListOf())
     val subscriptionList = MutableLiveData<List<Subscription>>(arrayListOf())
 
-    val subscriptionsIsEmpty = MutableLiveData<Boolean>(true)
-
     private val loading = MutableLiveData<Boolean>()
-    val setAdapterOnView = MutableLiveData<Boolean>()
+    val setRecommendedList = MutableLiveData<Boolean>()
+    val setSubscriptionsList = MutableLiveData<Boolean>()
 
     val selectedShow = MutableLiveData<Shows>()
 
@@ -64,11 +61,11 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
             getShowsFlow()
                 .onStart { }
                 .onCompletion {
-                    setAdapterOnView.postValue(true)
+                    setRecommendedList.postValue(true)
                 }
                 .collect {
                     showList.value?.addAll(it)
-                    setAdapterOnView.postValue(true)
+                    setRecommendedList.postValue(true)
                 }
         }
     }
@@ -132,6 +129,7 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
 
     fun getSubscriptions() = viewModelScope.launch {
         subscriptionList.value = repository.getAll()
+        setSubscriptionsList.postValue(true)
     }
 
     fun insert(show: Shows) = viewModelScope.launch {

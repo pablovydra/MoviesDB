@@ -14,15 +14,18 @@ import com.example.movies.R
 import com.example.movies.databinding.FragmentHomeBinding
 import com.example.movies.models.entity.Shows
 import com.example.movies.models.entity.Tv
+import com.example.movies.ui.home.adapter.AdapterActions
 import com.example.movies.ui.home.adapter.RecommendedAdapter
+import com.example.movies.ui.home.adapter.SubscriptionsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), RecommendedAdapter.RecommendedAdapterActions {
+class HomeFragment : Fragment(), AdapterActions {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by activityViewModels()
     private lateinit var adapter: RecommendedAdapter
+    private lateinit var adapterSubs: SubscriptionsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,12 +38,21 @@ class HomeFragment : Fragment(), RecommendedAdapter.RecommendedAdapterActions {
 
         adapter = RecommendedAdapter(this)
         binding.recycler.adapter = adapter
-
-        viewModel.setAdapterOnView.observe(viewLifecycleOwner, Observer {
+        viewModel.setRecommendedList.observe(viewLifecycleOwner, Observer {
             adapter.submitList(viewModel.showList.value)
         })
         binding.recycler.layoutManager = LinearLayoutManager(this.context)
         binding.recycler.setHasFixedSize(true)
+
+        adapterSubs = SubscriptionsAdapter(this)
+        binding.recyclerSubs.adapter = adapterSubs
+        viewModel.setSubscriptionsList.observe(viewLifecycleOwner, Observer {
+            adapterSubs.submitList(viewModel.subscriptionList.value)
+        })
+
+        binding.recyclerSubs.layoutManager =
+            LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerSubs.setHasFixedSize(true)
 
         binding.recycler.addOnScrollListener(
             object :

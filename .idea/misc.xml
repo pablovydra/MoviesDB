@@ -9,6 +9,9 @@
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/button_unselected.xml" value="0.236" />
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/button_unsubscribe.xml" value="0.2085" />
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/layout/fragment_details.xml" value="0.25" />
+        <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/layout/fragment_home.xml" value="0.264" />
+        <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/layout/recommended_item.xml" value="0.25" />
+        <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/layout/subscription_item.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.34791666666666665" />
         <entry key="app/src/main/res/layout/fragment_details.xml" value="0.34791666666666665" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.34791666666666665" />
