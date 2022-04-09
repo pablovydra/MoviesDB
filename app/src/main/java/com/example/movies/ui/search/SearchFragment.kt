@@ -1,6 +1,8 @@
 package com.example.movies.ui.search
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.R
 import com.example.movies.databinding.FragmentSearchBinding
@@ -33,43 +36,61 @@ class SearchFragment : Fragment(), AdapterActions {
         viewModel.getSubscriptions()
 
         adapter = SearchAdapter(this)
-        adapter.submitList(viewModel.showList.value)
 
-        adapter = SearchAdapter(this)
+        adapter.setData(viewModel.showList.value)
+
+        binding.search.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                adapter.filter.filter(charSequence.toString())
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+        })
+
         binding.recycler.adapter = adapter
 
         viewModel.setRecommendedList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.showList.value)
+            adapter.setData(viewModel.showList.value)
         })
 
         viewModel.showListWasEdited.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.showList.value)
+            adapter.setData(viewModel.showList.value)
         })
 
         binding.recycler.layoutManager = LinearLayoutManager(this.context)
         binding.recycler.setHasFixedSize(true)
 
+        binding.searchClose.setOnClickListener {
+            binding.search.text.clear()
+        }
+
+        binding.cancelSearch.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         return binding.root
     }
 
+
+
     override fun addSubscribe(show: Shows, callback: (() -> Unit)?) {
-        viewModel.showList.value?.forEach {
-            if (it.id == show.id) {
-                it.subscribed = true
-            }
-        }
+//        viewModel.showList.value?.forEach {
+//            if (it.id == show.id) {
+//                it.subscribed = true
+//            }
+//        }
         viewModel.insert(show)
-        viewModel.showListWasEdited.value = true
     }
 
     override fun deleteSubscribe(show: Shows, callback: (() -> Unit)?) {
-        viewModel.showList.value?.forEach {
-            if (it.id == show.id) {
-                it.subscribed = false
-            }
-        }
+//        viewModel.showList.value?.forEach {
+//            if (it.id == show.id) {
+//                it.subscribed = false
+//            }
+//        }
         viewModel.delete(show.id)
-        viewModel.showListWasEdited.value = true
     }
 
     override fun navigateToItem(show: Shows) {
@@ -77,4 +98,5 @@ class SearchFragment : Fragment(), AdapterActions {
         view?.findNavController()
             ?.navigate(R.id.action_global_DetailsFragment)
     }
+
 }
