@@ -3,19 +3,18 @@ package com.example.movies.ui.details
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.movies.R
 import com.example.movies.databinding.FragmentDetailsBinding
 import com.example.movies.ui.home.HomeViewModel
+import com.example.movies.utils.ImageUtils
 
 
 class DetailsFragment : Fragment() {
@@ -53,7 +52,12 @@ class DetailsFragment : Fragment() {
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     binding.cover.setImageBitmap(resource)
-                    binding.container.setBackgroundColor(getDominantColor(resource))
+                    binding.container.setBackgroundColor(ImageUtils.getDominantColor(resource))
+
+                    binding.overview.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
+                    binding.name.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
+                    binding.overviewTitle.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
+                    binding.year.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {}
@@ -113,12 +117,4 @@ class DetailsFragment : Fragment() {
 
         return binding.root
     }
-
-    fun getDominantColor(bitmap: Bitmap?): Int {
-        val newBitmap = Bitmap.createScaledBitmap(bitmap!!, 1, 1, true)
-        val color = newBitmap.getPixel(0, 0)
-        newBitmap.recycle()
-        return color
-    }
-
 }
