@@ -3,6 +3,7 @@ package com.example.movies.ui.details
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +54,25 @@ class DetailsFragment : Fragment() {
 
                 override fun onLoadCleared(placeholder: Drawable?) {}
             })
+
+        val isSubscribed = viewModel.subscriptionList.value?.filter { it.showId == viewModel.selectedShow.value?.id }
+        Log.i("skywalker", "isSubscribed: ${isSubscribed?.size} to ${viewModel.selectedShow.value?.name}")
+
+        if (isSubscribed != null) {
+            if (isSubscribed.isEmpty()) {
+                binding.buttonConstraint.alpha = 1F
+                binding.subscribeText.text = "Subscribe"
+            } else {
+                binding.buttonConstraint.alpha = 0.3F
+                binding.subscribeText.text = "Subscribed"
+            }
+        }
+
+        binding.buttonConstraint.setOnClickListener {
+            viewModel.selectedShow.value?.let { selectedShow -> viewModel.insert(selectedShow) }
+            binding.buttonConstraint.alpha = 0.3F
+            binding.subscribeText.text = "Subscribed"
+        }
 
         return binding.root
     }
