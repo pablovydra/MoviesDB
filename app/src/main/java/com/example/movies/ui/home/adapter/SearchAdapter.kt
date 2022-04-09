@@ -4,6 +4,8 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -13,9 +15,17 @@ import com.bumptech.glide.Glide
 import com.example.movies.R
 import com.example.movies.models.database.Shows
 import kotlinx.android.synthetic.main.search_item.view.*
+import java.util.*
 
 class SearchAdapter(private val listener: AdapterActions) :
-    ListAdapter<Shows, SearchAdapter.SearchViewHolder>(DiffUtilCallbackSearch) {
+    ListAdapter<Shows, SearchAdapter.SearchViewHolder>(DiffUtilCallbackSearch), Filterable {
+
+    var list = mutableListOf<Shows>()
+
+    fun setData(list: MutableList<Shows>?) {
+        this.list = list!!
+        submitList(list)
+    }
 
     class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val poster: ImageView = itemView.findViewById(R.id.poster)
@@ -66,14 +76,48 @@ class SearchAdapter(private val listener: AdapterActions) :
                 holder.itemView.subscribe_background.tag = R.drawable.button_unsubscribe_search
                 holder.itemView.subscribe_text.text = res.getString(R.string.subscribe_button)
                 holder.itemView.subscribe_text.setTextColor(res.getColor(R.color.white))
+
                 listener.deleteSubscribe(item)
+                item.subscribed = false
+
             } else {
                 holder.itemView.subscribe_background.setImageResource(R.drawable.button_subscribe)
                 holder.itemView.subscribe_background.tag = R.drawable.button_subscribe
                 holder.itemView.subscribe_text.text = res.getString(R.string.subscribed_button)
                 holder.itemView.subscribe_text.setTextColor(res.getColor(R.color.black_no_black))
+
                 listener.addSubscribe(item)
+                item.subscribed = true
+
             }
+        }
+    }
+
+    override fun getFilter(): Filter {
+        return searchFilter
+    }
+
+    private val searchFilter = object : Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            val filteredList = mutableListOf<Shows>()
+            if (constraint == null || constraint.isEmpty()) {
+                filteredList.addAll(list)
+            } else {
+                for (item in list) {
+                    item.name.let {
+                        if (it.lowercase(Locale.getDefault()).contains(constraint.toString())) {
+                            filteredList.add(item)
+                        }
+                    }
+                }
+            }
+            val results = FilterResults()
+            results.values = filteredList
+            return results
+        }
+
+        override fun publishResults(constraint: CharSequence?, filterResults: FilterResults?) {
+            submitList(filterResults?.values as MutableList<Shows>)
         }
     }
 
@@ -86,3 +130,4 @@ private object DiffUtilCallbackSearch : DiffUtil.ItemCallback<Shows>() {
 
     override fun areContentsTheSame(oldItem: Shows, newItem: Shows): Boolean = oldItem == newItem
 }
+
