@@ -57,7 +57,7 @@ class DetailsFragment : Fragment() {
                 override fun onLoadCleared(placeholder: Drawable?) {}
             })
 
-        val isSubscribed = viewModel.subscriptionList.value?.filter { it.showId == viewModel.selectedShow.value?.id }
+        val isSubscribed = viewModel.subscriptionList.value?.filter { it.id == viewModel.selectedShow.value?.id }
         Log.i("skywalker", "isSubscribed: ${isSubscribed?.size} to ${viewModel.selectedShow.value?.name}")
 
         if (isSubscribed != null) {

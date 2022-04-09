@@ -3,11 +3,10 @@ package com.example.movies.ui.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.movies.models.database.Shows
+import com.example.movies.models.database.ShowsRepository
 import com.example.movies.models.dto.ApiResource
 import com.example.movies.models.entity.Genres
-import com.example.movies.models.entity.Shows
-import com.example.movies.models.subscriptions.Subscription
-import com.example.movies.models.subscriptions.SubscriptionRepository
 import com.example.movies.models.usecase.MoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -18,11 +17,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase, private val repository: SubscriptionRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val moviesUseCase: MoviesUseCase,
+    private val repository: ShowsRepository
+) : ViewModel() {
 
     val showList = MutableLiveData<ArrayList<Shows>>(arrayListOf())
     private val genresList = MutableLiveData<List<Genres>>(mutableListOf())
-    val subscriptionList = MutableLiveData<List<Subscription>>(arrayListOf())
+    val subscriptionList = MutableLiveData<List<Shows>>(arrayListOf())
 
     private val loading = MutableLiveData<Boolean>()
     val setRecommendedList = MutableLiveData<Boolean>()
@@ -111,7 +113,6 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
                                 data.poster_path,
                                 data.overview,
                                 data.first_air_date ?: "",
-                                data.genre_ids,
                                 genreFinal,
                                 data.name,
                                 false
@@ -133,26 +134,7 @@ class HomeViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase
     }
 
     fun insert(show: Shows) = viewModelScope.launch {
-        var genreFinal = ""
-        if (show.genre_ids?.isNotEmpty() == true) {
-            val genderFilter = genresList.value?.filter { it.id == show.genre_ids.first() }
-            if (genderFilter != null) {
-                if (genderFilter.isNotEmpty()) {
-                    genreFinal = genderFilter.first().name
-                }
-            }
-        }
-        repository.insert(
-            Subscription(
-                show.id,
-                show.poster_path,
-                show.overview,
-                show.first_air_date,
-                genreFinal,
-                show.name,
-                show.subscribed
-            )
-        )
+        repository.insert(show)
     }
 
     fun delete(id: Int) = viewModelScope.launch {

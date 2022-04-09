@@ -3,10 +3,10 @@ package com.example.movies.di
 import android.content.Context
 import android.support.annotation.NonNull
 import androidx.room.Room
+import com.example.movies.models.database.ShowsDatabase
 import com.example.movies.models.network.RequestInterceptor
 import com.example.movies.models.repository.MoviesRepositoryImpl
 import com.example.movies.models.services.MoviesApiService
-import com.example.movies.models.subscriptions.SubscriptionDatabase
 import com.example.movies.models.usecase.MoviesUseCase
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
@@ -58,12 +58,12 @@ class AppModule {
         @ApplicationContext app: Context
     ) = Room.databaseBuilder(
         app,
-        SubscriptionDatabase::class.java,
-        "subscriptions"
+        ShowsDatabase::class.java,
+        "shows"
     ).build()
 
     @Singleton
     @Provides
-    fun provideSubscriptionDao(db: SubscriptionDatabase) = db.subscriptionDao()
+    fun provideSubscriptionDao(db: ShowsDatabase) = db.showsDao()
 
 }
