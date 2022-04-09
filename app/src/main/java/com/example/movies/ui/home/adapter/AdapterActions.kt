@@ -4,7 +4,7 @@ import com.example.movies.models.database.Shows
 import com.example.movies.models.entity.Tv
 
 interface AdapterActions {
-    fun addToFavorite(tv: Tv, callback: (() -> Unit)? = null)
-    fun removeFavorite(tv: Tv, callback: (() -> Unit)? = null)
+    fun addSubscribe(show: Shows, callback: (() -> Unit)? = null)
+    fun deleteSubscribe(show: Shows, callback: (() -> Unit)? = null)
     fun navigateToItem(show: Shows)
 }

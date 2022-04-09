@@ -5,12 +5,18 @@
       <map>
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/button_background.xml" value="0.236" />
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/button_background_selected.xml" value="0.236" />
+        <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/button_search.xml" value="0.2215" />
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/button_subscribe.xml" value="0.236" />
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/button_unselected.xml" value="0.236" />
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/button_unsubscribe.xml" value="0.2085" />
+        <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/button_unsubscribe_search.xml" value="0.2215" />
+        <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/ic_clear_circle.xml" value="0.2215" />
+        <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/drawable/linear_divider.xml" value="0.2215" />
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/layout/fragment_details.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/layout/fragment_home.xml" value="0.264" />
+        <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/layout/fragment_search.xml" value="0.46647230320699706" />
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/layout/recommended_item.xml" value="0.25" />
+        <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/layout/search_item.xml" value="0.536" />
         <entry key="..\:/AndroidProjects/MoviesDB/app/src/main/res/layout/subscription_item.xml" value="0.264" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.34791666666666665" />
         <entry key="app/src/main/res/layout/fragment_details.xml" value="0.34791666666666665" />

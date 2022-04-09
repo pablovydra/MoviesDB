@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -24,7 +25,7 @@ class DetailsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentDetailsBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
@@ -78,15 +79,37 @@ class DetailsFragment : Fragment() {
             if (binding.button.tag == R.drawable.button_subscribe) {
                 binding.button.setImageResource(R.drawable.button_unsubscribe)
                 binding.button.tag = R.drawable.button_unsubscribe
-                viewModel.selectedShow.value?.let { selectedShow -> viewModel.delete(selectedShow.id) }
                 binding.subscribeText.setTextColor(resources.getColor(R.color.white))
-                binding.subscribeText.text = "Subscribe"
+                binding.subscribeText.text = resources.getString(R.string.subscribe_button)
+
+                viewModel.selectedShow.value?.let { selectedShow ->
+                    viewModel.delete(selectedShow.id)
+                }
+
+                viewModel.showList.value?.forEach {
+                    if (it.id == viewModel.selectedShow.value?.id) {
+                        it.subscribed = false
+                    }
+                }
+                viewModel.showListWasEdited.value = true
+
             } else {
                 binding.button.setImageResource(R.drawable.button_subscribe)
                 binding.button.tag = R.drawable.button_subscribe
-                viewModel.selectedShow.value?.let { selectedShow -> viewModel.insert(selectedShow) }
                 binding.subscribeText.setTextColor(resources.getColor(R.color.black_no_black))
-                binding.subscribeText.text = "Subscribed"
+                binding.subscribeText.text = resources.getString(R.string.subscribed_button)
+
+                viewModel.selectedShow.value?.let { selectedShow ->
+                    viewModel.insert(selectedShow)
+                }
+
+                viewModel.showList.value?.forEach {
+                    if (it.id == viewModel.selectedShow.value?.id) {
+                        it.subscribed = true
+                    }
+                }
+                viewModel.showListWasEdited.value = true
+
             }
         }
 

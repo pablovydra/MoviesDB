@@ -12,5 +12,5 @@ data class Shows(
     @ColumnInfo(name = "first_air_date") val first_air_date: String,
     @ColumnInfo(name = "genre") val genre: String,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "subscribed") val subscribed: Boolean
+    @ColumnInfo(name = "subscribed") var subscribed: Boolean
 )

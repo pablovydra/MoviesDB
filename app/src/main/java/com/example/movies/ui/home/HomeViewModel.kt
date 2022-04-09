@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val moviesUseCase: MoviesUseCase,
-    private val repository: ShowsRepository
+    private val repository: ShowsRepository,
 ) : ViewModel() {
 
     val showList = MutableLiveData<ArrayList<Shows>>(arrayListOf())
@@ -31,6 +31,8 @@ class HomeViewModel @Inject constructor(
     val setSubscriptionsList = MutableLiveData<Boolean>()
 
     val selectedShow = MutableLiveData<Shows>()
+
+    val showListWasEdited = MutableLiveData<Boolean>()
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.IO)
@@ -107,6 +109,14 @@ class HomeViewModel @Inject constructor(
                             }
                         }
 
+                        val subscribedList = subscriptionList.value?.filter { it.id == data.id }
+                        var subscribed = false
+                        if (subscribedList != null) {
+                            if (subscribedList.isNotEmpty()) {
+                                subscribed = true
+                            }
+                        }
+
                         itemsToAdd.add(
                             Shows(
                                 data.id,
@@ -115,7 +125,7 @@ class HomeViewModel @Inject constructor(
                                 data.first_air_date ?: "",
                                 genreFinal,
                                 data.name,
-                                false
+                                subscribed
                             )
                         )
                     }

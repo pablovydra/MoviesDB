@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
 import com.example.movies.databinding.FragmentHomeBinding
 import com.example.movies.models.database.Shows
-import com.example.movies.models.entity.Tv
 import com.example.movies.ui.home.adapter.AdapterActions
 import com.example.movies.ui.home.adapter.RecommendedAdapter
 import com.example.movies.ui.home.adapter.SubscriptionsAdapter
@@ -29,7 +28,7 @@ class HomeFragment : Fragment(), AdapterActions {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
@@ -65,28 +64,34 @@ class HomeFragment : Fragment(), AdapterActions {
                 }
             })
 
+        binding.searchIcon.setOnClickListener {
+            navigateToSearch()
+        }
+
+        viewModel.showListWasEdited.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(viewModel.showList.value)
+            adapterSubs.submitList(viewModel.subscriptionList.value)
+        })
+
         return binding.root
     }
 
-    override fun addToFavorite(tv: Tv, callback: (() -> Unit)?) {
-    }
-
-    override fun removeFavorite(tv: Tv, callback: (() -> Unit)?) {
+    override fun addSubscribe(show: Shows, callback: (() -> Unit)?) {
 
     }
 
-//    override fun navigateToShowId(showId: Int) {
-//        val filteredShow = viewModel.showList.value?.filter { it.id == showId }
-//        viewModel.selectedShow.value = filteredShow?.first()
-//
-//        view?.findNavController()
-//            ?.navigate(R.id.action_homeFragment_to_detailsFragment)
-//    }
+    override fun deleteSubscribe(show: Shows, callback: (() -> Unit)?) {
+
+    }
+
+    private fun navigateToSearch() {
+        view?.findNavController()?.navigate(R.id.action_homeFragment_to_searchFragment)
+    }
 
     override fun navigateToItem(show: Shows) {
         viewModel.selectedShow.value = show
         view?.findNavController()
-            ?.navigate(R.id.action_homeFragment_to_detailsFragment)
+            ?.navigate(R.id.action_global_DetailsFragment)
     }
 
 }
