@@ -52,7 +52,6 @@ class DetailsFragment : Fragment() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     binding.cover.setImageBitmap(resource)
                     binding.container.setBackgroundColor(getDominantColor(resource))
-                    binding.subscribeText.setTextColor(getDominantColor(resource))
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {}
@@ -66,10 +65,12 @@ class DetailsFragment : Fragment() {
                 binding.button.setImageResource(R.drawable.button_unsubscribe)
                 binding.button.tag = R.drawable.button_unsubscribe
                 binding.subscribeText.text = "Subscribe"
+                binding.subscribeText.setTextColor(resources.getColor(R.color.white))
             } else {
                 binding.button.setImageResource(R.drawable.button_subscribe)
                 binding.button.tag = R.drawable.button_subscribe
                 binding.subscribeText.text = "Subscribed"
+                binding.subscribeText.setTextColor(resources.getColor(R.color.black_no_black))
             }
         }
 
@@ -78,11 +79,13 @@ class DetailsFragment : Fragment() {
                 binding.button.setImageResource(R.drawable.button_unsubscribe)
                 binding.button.tag = R.drawable.button_unsubscribe
                 viewModel.selectedShow.value?.let { selectedShow -> viewModel.delete(selectedShow.id) }
+                binding.subscribeText.setTextColor(resources.getColor(R.color.white))
                 binding.subscribeText.text = "Subscribe"
             } else {
                 binding.button.setImageResource(R.drawable.button_subscribe)
                 binding.button.tag = R.drawable.button_subscribe
                 viewModel.selectedShow.value?.let { selectedShow -> viewModel.insert(selectedShow) }
+                binding.subscribeText.setTextColor(resources.getColor(R.color.black_no_black))
                 binding.subscribeText.text = "Subscribed"
             }
         }
