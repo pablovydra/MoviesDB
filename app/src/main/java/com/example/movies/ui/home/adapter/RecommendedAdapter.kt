@@ -46,7 +46,7 @@ class RecommendedAdapter(
             .into(holder.poster)
 
         holder.itemView.setOnClickListener {
-            listener.navigateToItem(item)
+            listener.navigateToShowId(item.id)
         }
     }
 

@@ -41,8 +41,7 @@ class SubscriptionsAdapter(
             .into(holder.poster)
 
         holder.itemView.setOnClickListener {
-             listener.navigateToItem(Shows(
-                 item.id, item.poster_path, item.overview, item.first_air_date, null, item.genre, item.name, item.subscribed))
+             listener.navigateToShowId(item.showId)
         }
     }
 

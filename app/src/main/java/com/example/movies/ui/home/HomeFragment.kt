@@ -72,12 +72,21 @@ class HomeFragment : Fragment(), AdapterActions {
     }
 
     override fun removeFavorite(tv: Tv, callback: (() -> Unit)?) {
+
     }
 
-    override fun navigateToItem(show: Shows) {
-        viewModel.selectedShow.value = show
+    override fun navigateToShowId(showId: Int) {
+        val filteredShow = viewModel.showList.value?.filter { it.id == showId }
+        viewModel.selectedShow.value = filteredShow?.first()
+
         view?.findNavController()
             ?.navigate(R.id.action_homeFragment_to_detailsFragment)
     }
+
+//    override fun navigateToItem(show: Shows) {
+//        viewModel.selectedShow.value = show
+//        view?.findNavController()
+//            ?.navigate(R.id.action_homeFragment_to_detailsFragment)
+//    }
 
 }

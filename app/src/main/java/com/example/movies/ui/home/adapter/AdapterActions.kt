@@ -6,5 +6,6 @@ import com.example.movies.models.entity.Tv
 interface AdapterActions {
     fun addToFavorite(tv: Tv, callback: (() -> Unit)? = null)
     fun removeFavorite(tv: Tv, callback: (() -> Unit)? = null)
-    fun navigateToItem(show: Shows)
+//    fun navigateToItem(show: Shows)
+    fun navigateToShowId(showId: Int)
 }
