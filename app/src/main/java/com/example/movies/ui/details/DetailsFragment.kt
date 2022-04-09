@@ -89,6 +89,7 @@ class DetailsFragment : Fragment() {
                     if (it.id == viewModel.selectedShow.value?.id) {
                         it.subscribed = false
                     }
+                    viewModel.showListWasEdited.value = true
                 }
 
             } else {
@@ -105,6 +106,7 @@ class DetailsFragment : Fragment() {
                     if (it.id == viewModel.selectedShow.value?.id) {
                         it.subscribed = true
                     }
+                    viewModel.showListWasEdited.value = true
                 }
 
             }

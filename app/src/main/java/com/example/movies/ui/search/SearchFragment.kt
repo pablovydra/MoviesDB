@@ -17,8 +17,7 @@ import com.example.movies.databinding.FragmentSearchBinding
 import com.example.movies.models.database.Shows
 import com.example.movies.ui.home.HomeViewModel
 import com.example.movies.ui.home.adapter.AdapterActions
-import com.example.movies.ui.home.adapter.RecommendedAdapter
-import com.example.movies.ui.home.adapter.SearchAdapter
+import com.example.movies.ui.search.adapter.SearchAdapter
 
 class SearchFragment : Fragment(), AdapterActions {
 
@@ -70,26 +69,30 @@ class SearchFragment : Fragment(), AdapterActions {
             findNavController().popBackStack()
         }
 
+        binding.searchClose.visibility = View.GONE
+
+        binding.search.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {
+                if (s.isNullOrEmpty()) binding.searchClose.visibility = View.GONE
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                binding.searchClose.visibility = View.VISIBLE
+            }
+        })
+
         return binding.root
     }
 
-
-
     override fun addSubscribe(show: Shows, callback: (() -> Unit)?) {
-//        viewModel.showList.value?.forEach {
-//            if (it.id == show.id) {
-//                it.subscribed = true
-//            }
-//        }
         viewModel.insert(show)
     }
 
     override fun deleteSubscribe(show: Shows, callback: (() -> Unit)?) {
-//        viewModel.showList.value?.forEach {
-//            if (it.id == show.id) {
-//                it.subscribed = false
-//            }
-//        }
         viewModel.delete(show.id)
     }
 
