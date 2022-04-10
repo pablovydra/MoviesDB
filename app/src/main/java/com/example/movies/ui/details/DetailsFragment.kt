@@ -61,7 +61,8 @@ class DetailsFragment : Fragment() {
                     binding.overview.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
 
                     binding.name.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
-                    binding.overviewTitle.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
+                    binding.overviewTitle.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(
+                        resource)))
                     binding.year.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
                 }
 
@@ -97,7 +98,6 @@ class DetailsFragment : Fragment() {
                     if (it.id == selectedShow?.id) {
                         it.subscribed = false
                     }
-                    viewModel.showListWasEdited.value = true
                 }
 
             } else {
@@ -114,7 +114,6 @@ class DetailsFragment : Fragment() {
                     if (it.id == selectedShow?.id) {
                         it.subscribed = true
                     }
-                    viewModel.showListWasEdited.value = true
                 }
             }
         }

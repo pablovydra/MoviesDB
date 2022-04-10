@@ -54,10 +54,6 @@ class SearchFragment : Fragment(), AdapterActions {
             adapter.setData(viewModel.showList.value)
         })
 
-        viewModel.showListWasEdited.observe(viewLifecycleOwner, Observer {
-            adapter.setData(viewModel.showList.value)
-        })
-
         binding.recycler.layoutManager = LinearLayoutManager(this.context)
         binding.recycler.setHasFixedSize(true)
 

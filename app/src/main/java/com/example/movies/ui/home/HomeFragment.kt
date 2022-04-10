@@ -84,12 +84,6 @@ class HomeFragment : Fragment(), AdapterActions {
             navigateToSearch()
         }
 
-        viewModel.showListWasEdited.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.showList.value)
-            adapterSubs.submitList(viewModel.subscriptionList.value)
-            showOrHideSubscriptions()
-        })
-
         return binding.root
     }
 
