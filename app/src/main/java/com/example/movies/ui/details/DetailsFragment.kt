@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.movies.R
-import com.example.movies.databinding.FragmentDetails2Binding
+import com.example.movies.databinding.FragmentDetailsBinding
 import com.example.movies.ui.home.HomeViewModel
 import com.example.movies.utils.ImageUtils
 import com.google.android.material.appbar.AppBarLayout
@@ -22,14 +21,14 @@ import com.google.android.material.appbar.AppBarLayout
 
 class DetailsFragment : Fragment() {
 
-    private lateinit var binding: FragmentDetails2Binding
+    private lateinit var binding: FragmentDetailsBinding
     private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        binding = FragmentDetails2Binding.inflate(inflater, container, false)
+        binding = FragmentDetailsBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
 
         viewModel.getSubscriptions()
@@ -60,6 +59,7 @@ class DetailsFragment : Fragment() {
                     binding.container.setBackgroundColor(ImageUtils.getDominantColor(resource))
 
                     binding.overview.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
+
                     binding.name.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
                     binding.overviewTitle.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
                     binding.year.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
