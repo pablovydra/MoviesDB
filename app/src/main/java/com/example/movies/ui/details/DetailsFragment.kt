@@ -1,5 +1,6 @@
 package com.example.movies.ui.details
 
+import android.animation.ObjectAnimator
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -15,6 +16,8 @@ import com.example.movies.R
 import com.example.movies.databinding.FragmentDetailsBinding
 import com.example.movies.ui.home.HomeViewModel
 import com.example.movies.utils.ImageUtils
+import com.google.android.material.appbar.AppBarLayout
+
 
 class DetailsFragment : Fragment() {
 
@@ -45,6 +48,8 @@ class DetailsFragment : Fragment() {
 
         binding.overview.text = selectedShow?.overview
 
+        binding.year.text = selectedShow?.first_air_date?.split("-")?.first()
+
         Glide.with(this)
             .asBitmap()
             .load(uri)
@@ -54,6 +59,7 @@ class DetailsFragment : Fragment() {
                     binding.container.setBackgroundColor(ImageUtils.getDominantColor(resource))
 
                     binding.overview.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
+
                     binding.name.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
                     binding.overviewTitle.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
                     binding.year.setTextColor(ImageUtils.getBlackOrWhiteColor(ImageUtils.getDominantColor(resource)))
@@ -110,10 +116,24 @@ class DetailsFragment : Fragment() {
                     }
                     viewModel.showListWasEdited.value = true
                 }
-
             }
         }
 
+        binding.appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val offsetAlpha = appBarLayout.y / appBarLayout.totalScrollRange
+
+            val scaleDownX = ObjectAnimator.ofFloat(binding.headerConstraint, "scaleX", offsetAlpha + 1)
+            val scaleDownY = ObjectAnimator.ofFloat(binding.headerConstraint, "scaleY", offsetAlpha + 1)
+            scaleDownX.setDuration(0).start()
+            scaleDownY.setDuration(0).start()
+
+            val alpha = 1 - (offsetAlpha * -1)
+            binding.headerConstraint.alpha = alpha
+
+        })
+
         return binding.root
     }
+
+
 }
