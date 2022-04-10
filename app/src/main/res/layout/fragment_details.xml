@@ -11,7 +11,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/background_image"
@@ -25,131 +26,121 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/button_constraint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:layout_editor_absoluteX="103dp"
+            tools:layout_editor_absoluteY="355dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="0dp"
+            <ImageView
+                android:id="@+id/button"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/button_subscribe" />
 
-                <ImageView
-                    android:id="@+id/cover"
-                    android:layout_width="180dp"
-                    android:layout_height="230dp"
-                    android:layout_marginTop="32dp"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@tools:sample/avatars" />
+            <TextView
+                android:id="@+id/subscribe_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:paddingStart="50dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="50dp"
+                android:paddingBottom="10dp"
+                android:text="@string/subscribe_button"
+                android:textAllCaps="true"
+                android:textColor="@color/orange_light"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/white"
-                    android:textSize="26dp"
-                    app:layout_constraintEnd_toEndOf="@+id/cover"
-                    app:layout_constraintStart_toStartOf="@+id/cover"
-                    app:layout_constraintTop_toBottomOf="@+id/cover"
-                    tools:text="Breaking Bad" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header_constraint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/year"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="@+id/name"
-                    app:layout_constraintStart_toStartOf="@+id/name"
-                    app:layout_constraintTop_toBottomOf="@+id/name"
-                    tools:text="2011" />
+            <ImageView
+                android:id="@+id/cover"
+                android:layout_width="180dp"
+                android:layout_height="230dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/button_constraint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/year">
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/black"
+                android:textSize="26dp"
+                app:layout_constraintEnd_toEndOf="@+id/cover"
+                app:layout_constraintStart_toStartOf="@+id/cover"
+                app:layout_constraintTop_toBottomOf="@+id/cover"
+                tools:text="Breaking Bad" />
 
-                    <ImageView
-                        android:id="@+id/button"
-                        android:layout_width="200dp"
-                        android:layout_height="50dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/button_subscribe" />
+            <TextView
+                android:id="@+id/year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/name"
+                app:layout_constraintStart_toStartOf="@+id/name"
+                app:layout_constraintTop_toBottomOf="@+id/name"
+                tools:text="2011" />
 
-                    <TextView
-                        android:id="@+id/subscribe_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:paddingStart="50dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="50dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/subscribe_button"
-                        android:textAllCaps="true"
-                        android:textColor="@color/orange_light"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/overview_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="32dp"
-                    android:fontFamily="sans-serif-black"
-                    android:text="@string/title_overview"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black_no_black"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_constraint" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/overview_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/overview"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/overview_title"
-                    tools:text="Movie description lorem Movie description lorem Movie description lorem Movie description lorem Movie description lorem " />
+            <TextView
+                android:id="@+id/overview_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/title_overview"
+                android:textAllCaps="true"
+                android:textColor="@color/black_no_black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+            <TextView
+                android:id="@+id/overview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/overview_title"
+                tools:text="Movie description lorem Movie description lorem Movie description lorem Movie description lorem Movie description lorem " />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
