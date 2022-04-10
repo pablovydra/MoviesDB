@@ -16,7 +16,6 @@ import com.example.movies.databinding.FragmentDetailsBinding
 import com.example.movies.ui.home.HomeViewModel
 import com.example.movies.utils.ImageUtils
 
-
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding

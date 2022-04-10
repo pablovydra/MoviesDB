@@ -9,11 +9,8 @@ import com.example.movies.models.dto.ApiResource
 import com.example.movies.models.entity.Genres
 import com.example.movies.models.usecase.MoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +23,7 @@ class HomeViewModel @Inject constructor(
     private val genresList = MutableLiveData<List<Genres>>(mutableListOf())
     val subscriptionList = MutableLiveData<List<Shows>>(arrayListOf())
 
-    private val loading = MutableLiveData<Boolean>()
+    val loading = MutableLiveData<Boolean>()
     val setRecommendedList = MutableLiveData<Boolean>()
     val setSubscriptionsList = MutableLiveData<Boolean>()
 
@@ -42,15 +39,13 @@ class HomeViewModel @Inject constructor(
     init {
         coroutineScope.launch(Dispatchers.IO) {
             getGenres()
+            loading.postValue(true)
         }
     }
 
     private fun getGenres() {
         viewModelScope.launch(Dispatchers.IO) {
             getGenresFlows()
-                .onStart {
-                    loading.postValue(true)
-                }
                 .onCompletion {
                     getShows()
                 }
@@ -63,9 +58,9 @@ class HomeViewModel @Inject constructor(
     fun getShows() {
         viewModelScope.launch(Dispatchers.IO) {
             getShowsFlow()
-                .onStart { }
                 .onCompletion {
                     setRecommendedList.postValue(true)
+                    loading.postValue(false)
                 }
                 .collect {
                     showList.value?.addAll(it)
