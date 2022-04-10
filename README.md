@@ -7,7 +7,7 @@ This repository contains an Android project using Kotlin, MVVM + Clean Architect
 ## App Features
 * Show list of recommended tv shows with genre category
 * Search and filter by name
-* Add to subscriptions
+* Save subscription show into internal memory
 
 ## App demo 
 <img width="800" height="409.6" src="screenshots/screenshots.jpg">
