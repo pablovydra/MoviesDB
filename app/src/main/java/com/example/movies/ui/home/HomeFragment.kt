@@ -35,7 +35,22 @@ class HomeFragment : Fragment(), AdapterActions {
 
         viewModel.getSubscriptions()
 
-        // Recommended Shows
+        viewModel.loading.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.loading.visibility = View.VISIBLE
+                binding.lottie.apply {
+                    setAnimation("movies_loading.json")
+                    loop(true)
+                    playAnimation()
+                }
+            } else {
+                binding.loading.visibility = View.GONE
+                binding.lottie.apply {
+                    cancelAnimation()
+                }
+            }
+        })
+
         adapter = RecommendedAdapter(this)
         binding.recycler.adapter = adapter
         viewModel.setRecommendedList.observe(viewLifecycleOwner, Observer {
@@ -55,7 +70,6 @@ class HomeFragment : Fragment(), AdapterActions {
                 }
             })
 
-        // Subscribed Shows
         adapterSubs = SubscriptionsAdapter(this)
         binding.recyclerSubs.adapter = adapterSubs
         viewModel.setSubscriptionsList.observe(viewLifecycleOwner, Observer {
