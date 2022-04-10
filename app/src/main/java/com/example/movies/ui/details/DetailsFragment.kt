@@ -1,8 +1,10 @@
 package com.example.movies.ui.details
 
+import android.animation.ObjectAnimator
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,20 +14,22 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.movies.R
-import com.example.movies.databinding.FragmentDetailsBinding
+import com.example.movies.databinding.FragmentDetails2Binding
 import com.example.movies.ui.home.HomeViewModel
 import com.example.movies.utils.ImageUtils
+import com.google.android.material.appbar.AppBarLayout
+
 
 class DetailsFragment : Fragment() {
 
-    private lateinit var binding: FragmentDetailsBinding
+    private lateinit var binding: FragmentDetails2Binding
     private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        binding = FragmentDetails2Binding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
 
         viewModel.getSubscriptions()
@@ -44,6 +48,8 @@ class DetailsFragment : Fragment() {
         binding.name.text = selectedShow?.name
 
         binding.overview.text = selectedShow?.overview
+
+        binding.year.text = selectedShow?.first_air_date?.split("-")?.first()
 
         Glide.with(this)
             .asBitmap()
@@ -110,10 +116,24 @@ class DetailsFragment : Fragment() {
                     }
                     viewModel.showListWasEdited.value = true
                 }
-
             }
         }
 
+        binding.appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val offsetAlpha = appBarLayout.y / appBarLayout.totalScrollRange
+
+            val scaleDownX = ObjectAnimator.ofFloat(binding.headerConstraint, "scaleX", offsetAlpha + 1)
+            val scaleDownY = ObjectAnimator.ofFloat(binding.headerConstraint, "scaleY", offsetAlpha + 1)
+            scaleDownX.setDuration(0).start()
+            scaleDownY.setDuration(0).start()
+
+            val alpha = 1 - (offsetAlpha * -1)
+            binding.headerConstraint.alpha = alpha
+
+        })
+
         return binding.root
     }
+
+
 }
