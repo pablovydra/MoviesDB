@@ -1,4 +1,4 @@
-package com.example.movies.ui.home.adapter
+package com.example.movies.ui.adapter
 
 import com.example.movies.models.database.Shows
 

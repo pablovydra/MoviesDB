@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
 import com.example.movies.databinding.FragmentHomeBinding
 import com.example.movies.models.database.Shows
-import com.example.movies.ui.home.adapter.AdapterActions
-import com.example.movies.ui.home.adapter.RecommendedAdapter
-import com.example.movies.ui.home.adapter.SubscriptionsAdapter
+import com.example.movies.ui.adapter.AdapterActions
+import com.example.movies.ui.adapter.RecommendedAdapter
+import com.example.movies.ui.adapter.SubscriptionsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
