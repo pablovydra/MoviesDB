@@ -12,6 +12,10 @@ This repository contains an Android project using Kotlin, MVVM + Clean Architect
 ## App demo 
 <img width="800" height="409.6" src="screenshots/screenshots.jpg">
 
+## Integrate api key
+You can authenticate TMDB users within your application to extend the TMDB experience within your application in https://developers.themoviedb.org/. Once you get your api key add it on your local.properties below your sdk.dir as:
+tmdb_api_key=103sy80d1e219553786b7f9395g14625
+
 ## Library Used
 * [Dependency injection with Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
 * [Kotlin flows](https://developer.android.com/kotlin/flow)
