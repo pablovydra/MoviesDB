@@ -1,5 +1,6 @@
 package com.example.movies.ui.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,9 +11,7 @@ import com.example.movies.models.entity.Genres
 import com.example.movies.models.entity.Tv
 import com.example.movies.models.usecase.MoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,27 +22,40 @@ class HomeViewModel @Inject constructor(
     private val repository: ShowsRepository,
 ) : ViewModel() {
 
-    val showList = MutableLiveData<ArrayList<Shows>>(arrayListOf())
-    private val genresList = MutableLiveData<List<Genres>>(mutableListOf())
-    val subscriptionList = MutableLiveData<List<Shows>>(arrayListOf())
+    private val _showList = MutableLiveData<ArrayList<Shows>>()
+    val showList: LiveData<ArrayList<Shows>>
+        get() = _showList
 
-    val loading = MutableLiveData<Boolean>()
+    private val genresList: ArrayList<Genres> = arrayListOf()
 
-    val setRecommendedList = MutableLiveData<Boolean>()
-    val setSubscriptionsList = MutableLiveData<Boolean>()
+    private val _setShowList = MutableLiveData<Boolean>()
+    val setShowList: LiveData<Boolean>
+        get() = _setShowList
 
-    val selectedShow = MutableLiveData<Shows>()
+    private val _subscriptionList = MutableLiveData<List<Shows>>()
+    val subscriptionList: LiveData<List<Shows>>
+        get() = _subscriptionList
 
-    private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.IO)
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean>
+        get() = _loading
+
+    private val _selectedShow = MutableLiveData<Shows>()
+    val selectedShow: LiveData<Shows>
+        get() = _selectedShow
+
+    fun setSelectedShow(show: Shows) {
+        _selectedShow.value = show
+    }
 
     private var page = 0
 
     init {
-        coroutineScope.launch(Dispatchers.IO) {
-            loading.postValue(true)
-            getGenres()
-        }
+        _showList.value = arrayListOf()
+        _subscriptionList.value = arrayListOf()
+        _loading.value = true
+
+        getGenres()
     }
 
     private fun getGenres() {
@@ -53,47 +65,47 @@ class HomeViewModel @Inject constructor(
                     getShows()
                 }
                 .collect {
-                    genresList.postValue(it)
+                    genresList.add(it)
                 }
         }
     }
 
     fun getShows() {
-        coroutineScope.launch(Dispatchers.IO) {
-            getShowsByFlow()
+        viewModelScope.launch(Dispatchers.IO) {
+            getShowsFlow()
                 .onCompletion {
-                    loading.postValue(false)
-                    setRecommendedList.postValue(true)
+                    _setShowList.postValue(true)
+                    _loading.postValue(false)
                 }
                 .map {
                     setFormatData(it)
                 }
                 .collect {
-                    showList.value?.add(it)
+                    _showList.value?.add(it)
                 }
         }
     }
 
     private fun setFormatData(tv: Tv): Shows {
-        return Shows(tv.id,
+        return Shows(
+            tv.id,
             tv.poster_path,
             tv.overview,
             tv.first_air_date ?: "",
             getGenreByString(tv.genre_ids),
             tv.name,
-            getSubscriptionStatus(tv.id))
+            getSubscriptionStatus(tv.id)
+        )
     }
 
     private fun getGenreByString(ids: List<Int>): String {
         var genreFinal = ""
         if (ids.isNotEmpty()) {
-            val genderFilter = genresList.value?.filter { it.id == ids.first() }
-            if (genderFilter != null) {
-                genreFinal = if (genderFilter.isNotEmpty()) {
-                    genderFilter.first().name
-                } else {
-                    ""
-                }
+            val genderFilter = genresList.filter { it.id == ids.first() }
+            genreFinal = if (genderFilter.isNotEmpty()) {
+                genderFilter.first().name
+            } else {
+                ""
             }
         }
         return genreFinal
@@ -101,25 +113,25 @@ class HomeViewModel @Inject constructor(
 
     private fun getSubscriptionStatus(id: Int): Boolean {
         var isSubscribed = false
-        val subscribedList = subscriptionList.value?.filter { it.id == id }
+        val subscribedList = _subscriptionList.value?.filter { it.id == id }
         isSubscribed = !subscribedList.isNullOrEmpty()
         return isSubscribed
     }
 
-    private fun getGenresFlow(): Flow<List<Genres>> = flow {
+    private fun getGenresFlow(): Flow<Genres> = flow {
         val response = moviesUseCase.getGenresTv()
         when (response.status) {
             ApiResource.Status.SUCCESS -> {
                 response.data?.genres?.let {
-                    emit(it)
+                    it.forEach { genre ->
+                        emit(genre)
+                    }
                 }
-            }
-            ApiResource.Status.ERROR -> {
             }
         }
     }
 
-    private fun getShowsByFlow(): Flow<Tv> {
+    private fun getShowsFlow(): Flow<Tv> {
         return flow {
             val response = moviesUseCase.getDiscoverTv(++page)
             when (response.status) {
@@ -130,16 +142,12 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                 }
-                ApiResource.Status.ERROR -> {
-
-                }
             }
         }
     }
 
     fun getSubscriptions() = viewModelScope.launch {
-        subscriptionList.value = repository.getAll()
-        setSubscriptionsList.postValue(true)
+        _subscriptionList.value = repository.getAll()
     }
 
     fun insert(show: Shows) = viewModelScope.launch {
@@ -148,11 +156,6 @@ class HomeViewModel @Inject constructor(
 
     fun delete(id: Int) = viewModelScope.launch {
         repository.deleteById(id)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
     }
 
 }

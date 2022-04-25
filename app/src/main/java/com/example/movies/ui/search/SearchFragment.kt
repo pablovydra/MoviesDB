@@ -49,11 +49,6 @@ class SearchFragment : Fragment(), AdapterActions {
         })
 
         binding.recycler.adapter = adapter
-
-        viewModel.setRecommendedList.observe(viewLifecycleOwner, Observer {
-            adapter.setData(viewModel.showList.value)
-        })
-
         binding.recycler.layoutManager = LinearLayoutManager(this.context)
         binding.recycler.setHasFixedSize(true)
 
@@ -93,7 +88,7 @@ class SearchFragment : Fragment(), AdapterActions {
     }
 
     override fun navigateToItem(show: Shows) {
-        viewModel.selectedShow.value = show
+        viewModel.setSelectedShow(show)
         view?.findNavController()
             ?.navigate(R.id.action_global_DetailsFragment)
     }

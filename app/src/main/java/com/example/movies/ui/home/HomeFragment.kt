@@ -53,9 +53,11 @@ class HomeFragment : Fragment(), AdapterActions {
 
         adapter = RecommendedAdapter(this)
         binding.recycler.adapter = adapter
-        viewModel.setRecommendedList.observe(viewLifecycleOwner, Observer {
+
+        viewModel.setShowList.observe(viewLifecycleOwner, Observer {
             adapter.submitList(viewModel.showList.value)
         })
+
         binding.recycler.layoutManager = LinearLayoutManager(this.context)
         binding.recycler.setHasFixedSize(true)
 
@@ -72,8 +74,8 @@ class HomeFragment : Fragment(), AdapterActions {
 
         adapterSubs = SubscriptionsAdapter(this)
         binding.recyclerSubs.adapter = adapterSubs
-        viewModel.setSubscriptionsList.observe(viewLifecycleOwner, Observer {
-            adapterSubs.submitList(viewModel.subscriptionList.value)
+        viewModel.subscriptionList.observe(viewLifecycleOwner, Observer {
+            adapterSubs.submitList(it)
             showOrHideSubscriptions()
         })
         binding.recyclerSubs.layoutManager =
@@ -108,7 +110,7 @@ class HomeFragment : Fragment(), AdapterActions {
     }
 
     override fun navigateToItem(show: Shows) {
-        viewModel.selectedShow.value = show
+        viewModel.setSelectedShow(show)
         view?.findNavController()
             ?.navigate(R.id.action_global_DetailsFragment)
     }
